@@ -19,7 +19,9 @@ namespace QuickStart
 
         public float ZoomSpeed;
 
+        [SyncVar]
         public bool LeftClick;
+        [SyncVar]
         public bool RightClick;
 
         void Start()
@@ -77,7 +79,7 @@ namespace QuickStart
             if (other.gameObject.tag == "Player")
             {
                 
-                Debug.Log("Colliding!");
+                //Debug.Log("Colliding!");
 
                 // if player is clicking
                 if (other.gameObject.GetComponent<PlayerScript>().LeftClick)
@@ -96,7 +98,22 @@ namespace QuickStart
                     }
                 }
 
-                Debug.Log("Done!");
+                if (other.gameObject.GetComponent<PlayerScript>().RightClick)
+                {
+
+                    // if within the cone
+                    Vector3 otherForward = other.gameObject.transform.forward;
+                    Vector3 themToUs = transform.position - other.gameObject.transform.position;
+                    //if (Mathf.Abs(Vector3.Angle(otherForward, themToUs)) > 15)
+                    {
+                        // apply force
+                        OtherForces -= themToUs.normalized * 10; // dependant on distance.
+
+
+                    }
+                }
+
+                //Debug.Log("Done!");
 
             }
         }
