@@ -1,56 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+namespace QuickStart
 {
-    public GameObject CameraBoom;
-    public Camera PlayerCamera;
-
-
-    public float MovementScaler;
-
-    private Vector3 MovementForce;
-    private Vector3 OtherForces;
-
-    private Vector3 rotation;
-    public float lookSpeed;
-
-    public float ZoomSpeed;
-
-    
-
-
-    void Start()
+    public class PlayerController : NetworkBehaviour
     {
-
-        OtherForces = new Vector3(0, 0, 0);
-    }
-
-    void Update()
-    {
-        
-        
+        public GameObject CameraBoom;
+        public Camera PlayerCamera;
 
 
-        Vector3 horizontal = Input.GetAxisRaw("Horizontal") * transform.right;
-        Vector3 vertical = Input.GetAxisRaw("Vertical") * transform.forward;
+        public float MovementScaler;
 
-        Vector3 direction = horizontal + vertical;
+        private Vector3 MovementForce;
+        private Vector3 OtherForces;
 
-        MovementForce = direction * MovementScaler;
-        gameObject.GetComponent<Rigidbody>().velocity = MovementForce + OtherForces;
+        private Vector3 rotation;
+        public float lookSpeed;
 
-        rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
-        transform.eulerAngles = new Vector3(0, rotation.y, 0);
+        public float ZoomSpeed;
 
-        rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
-        CameraBoom.transform.eulerAngles = transform.eulerAngles + new Vector3(rotation.x, 0, 0);
 
-        if (Input.GetAxisRaw("Mouse ScrollWheel") != 0)
+
+
+        void Start()
         {
-            PlayerCamera.transform.localPosition += new Vector3(0, 0, Input.GetAxisRaw("Mouse ScrollWheel") * ZoomSpeed);
+
+            OtherForces = new Vector3(0, 0, 0);
         }
 
+        void Update()
+        {
+
+
+
+
+            Vector3 horizontal = Input.GetAxisRaw("Horizontal") * transform.right;
+            Vector3 vertical = Input.GetAxisRaw("Vertical") * transform.forward;
+
+            Vector3 direction = horizontal + vertical;
+
+            MovementForce = direction * MovementScaler;
+            gameObject.GetComponent<Rigidbody>().velocity = MovementForce + OtherForces;
+
+            rotation.y += Input.GetAxis("Mouse X") * lookSpeed;
+            transform.eulerAngles = new Vector3(0, rotation.y, 0);
+
+            rotation.x += -Input.GetAxis("Mouse Y") * lookSpeed;
+            CameraBoom.transform.eulerAngles = transform.eulerAngles + new Vector3(rotation.x, 0, 0);
+
+            if (Input.GetAxisRaw("Mouse ScrollWheel") != 0)
+            {
+                PlayerCamera.transform.localPosition += new Vector3(0, 0, Input.GetAxisRaw("Mouse ScrollWheel") * ZoomSpeed);
+            }
+
+        }
     }
 }
