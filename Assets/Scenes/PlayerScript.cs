@@ -19,6 +19,9 @@ namespace QuickStart
 
         public float ZoomSpeed;
 
+        public bool LeftClick;
+        public bool RightClick;
+
         void Start()
         {
             OtherForces = new Vector3(0, 0, 0);
@@ -33,7 +36,12 @@ namespace QuickStart
         void Update()
         {
             if (!isLocalPlayer) { return; }
-            
+
+            LeftClick = Input.GetMouseButton(0);
+            RightClick = Input.GetMouseButton(1);
+
+
+
             //float moveX = Input.GetAxis("Horizontal") * Time.deltaTime * 110.0f;
             //float moveZ = Input.GetAxis("Vertical") * Time.deltaTime * 4f;
             //
@@ -59,6 +67,37 @@ namespace QuickStart
             if (Input.GetAxisRaw("Mouse ScrollWheel") != 0)
             {
                 Camera.main.transform.localPosition += new Vector3(0, 0, Input.GetAxisRaw("Mouse ScrollWheel") * ZoomSpeed);
+            }
+            OtherForces = new Vector3(0, 0, 0);
+        }
+
+        public void OnTriggerStay(Collider other)
+        { 
+            // if colliding with another player
+            if (other.gameObject.tag == "Player")
+            {
+                
+                Debug.Log("Colliding!");
+
+                // if player is clicking
+                if (other.gameObject.GetComponent<PlayerScript>().LeftClick)
+                {
+                    Debug.Log("Click!");
+
+                    // if within the cone
+                    Vector3 otherForward = other.gameObject.transform.forward;
+                    Vector3 themToUs = transform.position - other.gameObject.transform.position;
+                    //if (Mathf.Abs(Vector3.Angle(otherForward, themToUs)) > 15)
+                    {
+                        // apply force
+                        OtherForces += themToUs.normalized * 10; // dependant on distance.
+
+
+                    }
+                }
+
+                Debug.Log("Done!");
+
             }
         }
     }
