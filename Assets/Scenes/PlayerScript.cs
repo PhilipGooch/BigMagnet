@@ -74,7 +74,9 @@ namespace QuickStart
         }
 
         public void OnTriggerStay(Collider other)
-        { 
+        {
+            if (other.gameObject == this) return;
+
             // if colliding with another player
             if (other.gameObject.tag == "Player")
             {
